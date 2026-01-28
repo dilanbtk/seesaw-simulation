@@ -1,49 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seesaw Simulation</title>
-    <link rel="stylesheet" href="style.css">
-
+  <meta charset="UTF-8" />
+  <title>Seesaw Simulation</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
-    <div class="top-panel">
-
-        <div class="card">
-            <span>Sol Ağırlık</span>
-            <strong id="leftWeight">0 kg</strong>
-    </div>
-
-        <div class="card">
-            <span>Sağ Ağırlık</span>
-            <strong id="rightWeight">0 kg</strong>
-    </div>
-
-        <div class="card">
-            <span>Eğim Açısı</span>
-            <strong id="angleValue">0°</strong>
-        </div>
-
-        <div class="card preview">
-            <span>Sonraki Ağırlık</span>
-            <strong id="nextWeight">- kg</strong>
-        </div>
-
-        <button id="resetBtn">Reset</button>
-    </div>
-
-    <div class="scene">
-        <div id="seesaw">
-            <div class="pivot"></div>
-        </div>
+  <div class="top-panel">
+    
+    <div class="card">
+      <span>Sol Ağırlık</span>
+      <strong id="leftWeight">0 kg</strong>
     </div>
 
 
-    <script src="script.js"></script>
+    <div class="card">
+      <span>Sağ Ağırlık</span>
+      <strong id="rightWeight">0 kg</strong>
+    </div>
+
+
+    <div class="card">
+      <span>Eğim Açısı</span>
+      <strong id="angleValue">0°</strong>
+    </div>
+
+    <button id="resetBtn">Reset</button>
+  </div>
+
+
+  <div class="scene">
+    <div id="seesaw">
+      <div class="pivot"></div>
+    </div>
+  </div>
+
+  
+  <div class="log-card">
+    <h3>Atılan Ağırlıklar</h3>
+    <ul id="dropList"></ul>
+  </div>
+
+  <script src="script.js"></script>
 </body>
-
 </html>

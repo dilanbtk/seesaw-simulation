@@ -1,4 +1,3 @@
-
 * {
   box-sizing: border-box;
   font-family: Arial, sans-serif;
@@ -6,13 +5,13 @@
 
 body {
   background: #f4f6f8;
-  
+  padding: 20px;
 }
+
 .top-panel {
   display: flex;
   gap: 12px;
   align-items: center;
-  flex-wrap: wrap;
   margin-bottom: 30px;
 }
 
@@ -35,12 +34,9 @@ body {
   display: block;
   margin-top: 4px;
 }
-.preview {
-  border: 2px dashed #ffa502;
-}
 
 button {
-  padding: 12px 18px;
+  padding: 12px 16px;
   border-radius: 10px;
   border: none;
   cursor: pointer;
@@ -48,46 +44,67 @@ button {
   color: white;
   font-weight: bold;
 }
-.scene{
-    display: flex;
-    justify-content: center;
-    margin: 100px 0;
+
+.scene {
+  display: flex;
+  justify-content: center;
+  margin: 60px 0;
 }
-#seesaw{
-    position: relative;
-    width: 400px;
-    height: 8px;
-    background: #ffa502;
-    border-radius: 4px;
-    transform-origin: center center;
-    transition: transform 0.6s ease;
-    cursor: pointer;
+
+#seesaw {
+  position: relative;
+  width: 400px;
+  height: 8px;
+  background: #333;
+  border-radius: 4px;
+  transform-origin: center center;
+  transition: transform 0.6s ease;
 }
-.pivot{
-    position: absolute;
-    left: 50%;
-    top: 100%;
-    width: 0;
-    height: 0;
-    border-left: 14px solid transparent;
-    border-right: 14px solid transparent;
-    border-top: 24px solid #110b01;
-    transform: translateX(-50%);
-    top: 4px;
-}   
+
+.pivot {
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 0;
+  height: 0;
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+  border-top: 24px solid crimson;
+  transform: translateX(-50%);
+}
 
 .weight {
   position: absolute;
-  top: -18px;
-  width: 16px;
-  height: 16px;
-  background: #e63946;
+  top: -28px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
+  background: #4c7ef3;
+  color: white;
+  font-size: 11px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 10px;
-  color: #fff;
-  user-select: none;
-  pointer-events: none;
+}
+
+.log-card {
+  max-width: 400px;
+  margin: 0 auto;
+  background: white;
+  padding: 16px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.log-card h3 {
+  margin-bottom: 10px;
+}
+
+.log-card ul {
+  padding-left: 16px;
+}
+
+.log-card li {
+  font-size: 14px;
+  margin-bottom: 6px;
 }

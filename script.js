@@ -1,91 +1,90 @@
-
 const seesaw = document.getElementById("seesaw");
+const leftWeightEl = document.getElementById("leftWeight");
+const rightWeightEl = document.getElementById("rightWeight");
+const angleValueEl = document.getElementById("angleValue");
+const dropList = document.getElementById("dropList");
+const resetBtn = document.getElementById("resetBtn");
 
-
-const objects = [];
-let currentAngle = 0;
+const PLANK_WIDTH = 400;
 const MAX_ANGLE = 30;
 
+let items = JSON.parse(localStorage.getItem("seesawItems")) || [];
 
-function calculateTorque(items) {
+const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+
+function renderItems() {
+  seesaw.querySelectorAll(".weight").forEach(w => w.remove());
+  dropList.innerHTML = "";
+
+  items.forEach(item => {
+    const el = document.createElement("div");
+    el.className = "weight";
+    el.textContent = `${item.weight}`;
+    el.style.left = `${item.x}px`;
+    seesaw.appendChild(el);
+
+    const li = document.createElement("li");
+    li.textContent = `${item.weight}kg → ${item.side}`;
+    dropList.appendChild(li);
+  });
+}
+
+
+function updateSeesaw() {
   let leftTorque = 0;
   let rightTorque = 0;
+  let leftWeight = 0;
+  let rightWeight = 0;
 
-  items.forEach((obj) => {
-    const torque = obj.weight * obj.distance;
-
-    if (obj.side === "left") {
-      leftTorque += torque;
+  items.forEach(item => {
+    if (item.side === "left") {
+      leftTorque += item.weight * item.distance;
+      leftWeight += item.weight;
     } else {
-      rightTorque += torque;
+      rightTorque += item.weight * item.distance;
+      rightWeight += item.weight;
     }
   });
 
-  return { leftTorque, rightTorque };
-}
+  const angle = clamp((rightTorque - leftTorque) / 10, -MAX_ANGLE, MAX_ANGLE);
 
-function calculateAngle(leftTorque, rightTorque) {
-  const diff = rightTorque - leftTorque;
+  seesaw.style.transform = `rotate(${angle}deg)`;
+  leftWeightEl.textContent = `${leftWeight} kg`;
+  rightWeightEl.textContent = `${rightWeight} kg`;
+  angleValueEl.textContent = `${angle.toFixed(1)}°`;
 
-  let angle = diff / 500; 
-
-
-  if (angle > MAX_ANGLE) angle = MAX_ANGLE;
-  if (angle < -MAX_ANGLE) angle = -MAX_ANGLE;
-
-  return angle;
+  localStorage.setItem("seesawItems", JSON.stringify(items));
 }
 
 
-function renderWeights() {
-
-  seesaw.querySelectorAll(".weight").forEach((el) => el.remove());
-
-  objects.forEach((obj) => {
-    const div = document.createElement("div");
-    div.className = "weight";
-    div.textContent = obj.weight + "kg";
-
-    div.style.position = "absolute";
-    div.style.left = `${obj.x - 12}px`;
-    div.style.top = `-28px`;
-
-    seesaw.appendChild(div);
-  });
-}
-
-seesaw.addEventListener("click", (event) => {
+seesaw.addEventListener("click", e => {
   const rect = seesaw.getBoundingClientRect();
-  const clickX = event.clientX - rect.left;
-  const pivotX = rect.width / 2;
+  const clickX = e.clientX - rect.left;
 
-  const side = clickX < pivotX ? "left" : "right";
-  const distance = Math.abs(clickX - pivotX);
-
+  const center = PLANK_WIDTH / 2;
+  const distance = Math.abs(clickX - center);
+  const side = clickX < center ? "left" : "right";
   const weight = Math.floor(Math.random() * 10) + 1;
 
-  const newObject = {
-    id: Date.now(),
+  items.push({
+    x: clickX - 12,
     weight,
     side,
-    distance,
-    x: clickX
-  };
+    distance
+  });
 
-  objects.push(newObject);
-
-
-  const { leftTorque, rightTorque } = calculateTorque(objects);
-
-
-  currentAngle = calculateAngle(leftTorque, rightTorque);
-
-  
-  seesaw.style.transform = `rotate(${currentAngle}deg)`;
-
-  renderWeights();
-
- 
-  console.log("STATE:", objects);
-  console.log("ANGLE:", currentAngle);
+  renderItems();
+  updateSeesaw();
 });
+
+
+resetBtn.addEventListener("click", () => {
+  items = [];
+  localStorage.removeItem("seesawItems");
+  renderItems();
+  updateSeesaw();
+});
+
+
+renderItems();
+updateSeesaw();
