@@ -1,6 +1,6 @@
 const seesaw = document.getElementById("seesaw");
 
-
+// Global state
 const objects = [];
 
 seesaw.addEventListener("click", (event) => {
@@ -9,12 +9,10 @@ seesaw.addEventListener("click", (event) => {
 
   const clickX = event.clientX - plankRect.left;
 
-
   const pivotX = plankRect.width / 2;
 
   const side = clickX < pivotX ? "left" : "right";
   const distance = Math.abs(clickX - pivotX);
-
 
   const weight = Math.floor(Math.random() * 10) + 1;
 
