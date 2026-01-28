@@ -3,14 +3,28 @@ const seesaw = document.getElementById("seesaw");
 
 const objects = [];
 
+function calculateTorque(objects) {
+  let leftTorque = 0;
+  let rightTorque = 0;
+
+  objects.forEach((obj) => {
+    const torque = obj.weight * obj.distance;
+
+    if (obj.side === "left") {
+      leftTorque += torque;
+    } else {
+      rightTorque += torque;
+    }
+  });
+
+  return { leftTorque, rightTorque };
+}
+
 function renderObject(obj) {
   const el = document.createElement("div");
   el.className = "weight";
   el.textContent = obj.weight;
-
-
   el.style.left = `${obj.x - 8}px`;
-
   seesaw.appendChild(el);
 }
 
@@ -34,5 +48,8 @@ seesaw.addEventListener("click", (event) => {
   objects.push(newObject);
   renderObject(newObject);
 
-  console.log("Current objects:", objects);
+  const { leftTorque, rightTorque } = calculateTorque(objects);
+
+  console.log("Left torque:", leftTorque);
+  console.log("Right torque:", rightTorque);
 });
