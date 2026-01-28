@@ -4,13 +4,21 @@ const rightWeightEl = document.getElementById("rightWeight");
 const angleValueEl = document.getElementById("angleValue");
 const dropList = document.getElementById("dropList");
 const resetBtn = document.getElementById("resetBtn");
+const nextWeightEl = document.getElementById("nextWeight");
 
 const PLANK_WIDTH = 400;
 const MAX_ANGLE = 30;
 
 let items = JSON.parse(localStorage.getItem("seesawItems")) || [];
+let nextWeight = generateRandomWeight();
 
-const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function generateRandomWeight() {
+  return Math.floor(Math.random() * 10) + 1;
+}
 
 function renderItems() {
   seesaw.querySelectorAll(".weight").forEach(w => w.remove());
@@ -19,16 +27,15 @@ function renderItems() {
   items.forEach(item => {
     const el = document.createElement("div");
     el.className = "weight";
-    el.textContent = `${item.weight}`;
+    el.textContent = item.weight;
     el.style.left = `${item.x}px`;
     seesaw.appendChild(el);
 
     const li = document.createElement("li");
-    li.textContent = `${item.weight}kg → ${item.side}`;
+    li.textContent = `${item.weight} kg → ${item.side} (${Math.round(item.distance)}px)`;
     dropList.appendChild(li);
   });
 }
-
 
 function updateSeesaw() {
   let leftTorque = 0;
@@ -56,7 +63,6 @@ function updateSeesaw() {
   localStorage.setItem("seesawItems", JSON.stringify(items));
 }
 
-
 seesaw.addEventListener("click", e => {
   const rect = seesaw.getBoundingClientRect();
   const clickX = e.clientX - rect.left;
@@ -64,14 +70,18 @@ seesaw.addEventListener("click", e => {
   const center = PLANK_WIDTH / 2;
   const distance = Math.abs(clickX - center);
   const side = clickX < center ? "left" : "right";
-  const weight = Math.floor(Math.random() * 10) + 1;
+
+  const weight = nextWeight;
 
   items.push({
-    x: clickX - 12,
+    x: clickX - 13,
     weight,
     side,
     distance
   });
+
+  nextWeight = generateRandomWeight();
+  nextWeightEl.textContent = `${nextWeight} kg`;
 
   renderItems();
   updateSeesaw();
@@ -81,10 +91,15 @@ seesaw.addEventListener("click", e => {
 resetBtn.addEventListener("click", () => {
   items = [];
   localStorage.removeItem("seesawItems");
+
+  nextWeight = generateRandomWeight();
+  nextWeightEl.textContent = `${nextWeight} kg`;
+
   renderItems();
   updateSeesaw();
 });
 
 
+nextWeightEl.textContent = `${nextWeight} kg`;
 renderItems();
 updateSeesaw();

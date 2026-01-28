@@ -6,28 +6,30 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
   <div class="top-panel">
-    
     <div class="card">
       <span>Sol Ağırlık</span>
       <strong id="leftWeight">0 kg</strong>
     </div>
-
 
     <div class="card">
       <span>Sağ Ağırlık</span>
       <strong id="rightWeight">0 kg</strong>
     </div>
 
-
     <div class="card">
       <span>Eğim Açısı</span>
       <strong id="angleValue">0°</strong>
     </div>
 
+    <div class="card preview">
+      <span>Sonraki Ağırlık</span>
+      <strong id="nextWeight">- kg</strong>
+    </div>
+
     <button id="resetBtn">Reset</button>
   </div>
-
 
   <div class="scene">
     <div id="seesaw">
@@ -35,7 +37,6 @@
     </div>
   </div>
 
-  
   <div class="log-card">
     <h3>Atılan Ağırlıklar</h3>
     <ul id="dropList"></ul>
