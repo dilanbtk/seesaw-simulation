@@ -29,10 +29,13 @@ function renderItems() {
     el.className = "weight";
     el.textContent = item.weight;
     el.style.left = `${item.x}px`;
+    el.style.width = `${(item.weight + 12) * 2}px`;
+    el.style.height = `${(item.weight + 12) * 2}px`;
+    el.style.top = `${ (-1 * ((item.weight + 12) * 2))}px`;
     seesaw.appendChild(el);
 
     const li = document.createElement("li");
-    li.textContent = `${item.weight} kg → ${item.side} (${Math.round(item.distance)}px)`;
+    li.textContent = `Merkezden ${Math.round(item.distance)}px uzaklığa  ${item.side} tarafa  ${item.weight} kg ağırlık bırakıldı.`;
     dropList.appendChild(li);
   });
 }
@@ -44,7 +47,7 @@ function updateSeesaw() {
   let rightWeight = 0;
 
   items.forEach(item => {
-    if (item.side === "left") {
+    if (item.side === "sol") {
       leftTorque += item.weight * item.distance;
       leftWeight += item.weight;
     } else {
@@ -69,12 +72,14 @@ seesaw.addEventListener("click", e => {
 
   const center = PLANK_WIDTH / 2;
   const distance = Math.abs(clickX - center);
-  const side = clickX < center ? "left" : "right";
+  const side = clickX < center ? "sol" : "sağ";
 
   const weight = nextWeight;
+  
+  let size = (weight + 12) * 2;
 
   items.push({
-    x: clickX - 13,
+    x: clickX - (size / 2),
     weight,
     side,
     distance

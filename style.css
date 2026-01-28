@@ -53,6 +53,8 @@ button {
 
 .scene {
   display: flex;
+  align-items: center;
+  flex-direction: column;
   justify-content: center;
   margin: 120px 0;
 }
@@ -69,7 +71,7 @@ button {
 }
 
 .pivot {
-  position: absolute;
+  position: block;
   left: 50%;
   top: 100%;
   width: 0;
@@ -77,7 +79,8 @@ button {
   border-left: 14px solid transparent;
   border-right: 14px solid transparent;
   border-top: 24px solid crimson;
-  transform: translateX(-50%);
+  
+  rotate: 180deg;
 }
 
 
