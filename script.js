@@ -2,6 +2,7 @@ const seesaw = document.getElementById("seesaw");
 
 
 const objects = [];
+let currentAngle = 0;
 
 function calculateTorque(objects) {
   let leftTorque = 0;
@@ -18,6 +19,14 @@ function calculateTorque(objects) {
   });
 
   return { leftTorque, rightTorque };
+}
+
+function calculateAngle(leftTorque, rightTorque) {
+  const scaleFactor = 10;
+  const rawAngle = (rightTorque - leftTorque) / scaleFactor;
+
+  const clampedAngle = Math.max(-30, Math.min(30, rawAngle));
+  return clampedAngle;
 }
 
 function renderObject(obj) {
@@ -49,7 +58,7 @@ seesaw.addEventListener("click", (event) => {
   renderObject(newObject);
 
   const { leftTorque, rightTorque } = calculateTorque(objects);
+  currentAngle = calculateAngle(leftTorque, rightTorque);
 
-  console.log("Left torque:", leftTorque);
-  console.log("Right torque:", rightTorque);
+  console.log("Angle:", currentAngle.toFixed(2));
 });
