@@ -1,14 +1,17 @@
+
 const seesaw = document.getElementById("seesaw");
 
 
 const objects = [];
 let currentAngle = 0;
+const MAX_ANGLE = 30;
 
-function calculateTorque(objects) {
+
+function calculateTorque(items) {
   let leftTorque = 0;
   let rightTorque = 0;
 
-  objects.forEach((obj) => {
+  items.forEach((obj) => {
     const torque = obj.weight * obj.distance;
 
     if (obj.side === "left") {
@@ -22,28 +25,43 @@ function calculateTorque(objects) {
 }
 
 function calculateAngle(leftTorque, rightTorque) {
-  const scaleFactor = 10;
-  const rawAngle = (rightTorque - leftTorque) / scaleFactor;
+  const diff = rightTorque - leftTorque;
 
-  const clampedAngle = Math.max(-30, Math.min(30, rawAngle));
-  return clampedAngle;
+  let angle = diff / 500; 
+
+
+  if (angle > MAX_ANGLE) angle = MAX_ANGLE;
+  if (angle < -MAX_ANGLE) angle = -MAX_ANGLE;
+
+  return angle;
 }
 
-function renderObject(obj) {
-  const el = document.createElement("div");
-  el.className = "weight";
-  el.textContent = obj.weight;
-  el.style.left = `${obj.x - 8}px`;
-  seesaw.appendChild(el);
+
+function renderWeights() {
+
+  seesaw.querySelectorAll(".weight").forEach((el) => el.remove());
+
+  objects.forEach((obj) => {
+    const div = document.createElement("div");
+    div.className = "weight";
+    div.textContent = obj.weight + "kg";
+
+    div.style.position = "absolute";
+    div.style.left = `${obj.x - 12}px`;
+    div.style.top = `-28px`;
+
+    seesaw.appendChild(div);
+  });
 }
 
 seesaw.addEventListener("click", (event) => {
-  const plankRect = seesaw.getBoundingClientRect();
-  const clickX = event.clientX - plankRect.left;
-  const pivotX = plankRect.width / 2;
+  const rect = seesaw.getBoundingClientRect();
+  const clickX = event.clientX - rect.left;
+  const pivotX = rect.width / 2;
 
   const side = clickX < pivotX ? "left" : "right";
   const distance = Math.abs(clickX - pivotX);
+
   const weight = Math.floor(Math.random() * 10) + 1;
 
   const newObject = {
@@ -55,10 +73,19 @@ seesaw.addEventListener("click", (event) => {
   };
 
   objects.push(newObject);
-  renderObject(newObject);
+
 
   const { leftTorque, rightTorque } = calculateTorque(objects);
+
+
   currentAngle = calculateAngle(leftTorque, rightTorque);
 
-  console.log("Angle:", currentAngle.toFixed(2));
+  
+  seesaw.style.transform = `rotate(${currentAngle}deg)`;
+
+  renderWeights();
+
+ 
+  console.log("STATE:", objects);
+  console.log("ANGLE:", currentAngle);
 });
